@@ -135,6 +135,7 @@ class main_fragment : Fragment() {
             basketbolViewModel.reset()
             textAPTS.text = basketbolViewModel.teamAPoints.toString()
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
+            Log.d(TAG, "Reset done.")
         }
 
         displayButton.setOnClickListener {

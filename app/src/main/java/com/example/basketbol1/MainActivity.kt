@@ -18,7 +18,7 @@ import com.example.basketbol1.Team
 //import com.example.myapplication.R
 //import com.example.myapplication.Team
 
-//private const val TAG = "MainActivity"
+private const val TAG = "MainActivity"
 //private const val KEY_AScore = "AScore"
 //private const val KEY_BScore = "BScore"
 //private const val REQUEST_CODE_CLICKED = 0
@@ -43,11 +43,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        Log.d(TAG, "onCreate(Bundle?) called")
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if(currentFragment == null){
-            val fragment = main_fragment()
+            val fragment = BBGameListFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
         }
 
