@@ -1,6 +1,7 @@
 package com.example.basketbol1
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,14 +29,77 @@ class main_fragment : Fragment() {
     private lateinit var buttonBPT1: Button
     private lateinit var buttonReset: Button
     private lateinit var displayButton : Button
+    private lateinit var mContext : Context
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         Log.d(TAG, "Got a BasketbolViewModel: $basketbolViewModel")
+//        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
+//        basketbolViewModel.teams[0].score = aScore
+//        textAPTS.text = basketbolViewModel.teamAPoints.toString()
+//        val bScore = savedInstanceState?.getInt(KEY_BScore, 0) ?: 0
+//        basketbolViewModel.teams[1].score = bScore
+//        textBPTS.text = basketbolViewModel.teamBPoints.toString()
+//        buttonAPT3.setOnClickListener {
+//            basketbolViewModel.updatePts("A", 3)
+//            textAPTS.text = basketbolViewModel.teamAPoints.toString()
+//        }
+//        buttonAPT2.setOnClickListener {
+//            basketbolViewModel.updatePts("A", 2)
+//            textAPTS.text = basketbolViewModel.teamAPoints.toString()
+//        }
+//        buttonAPT1.setOnClickListener {
+//            basketbolViewModel.updatePts("A", 1)
+//            textAPTS.text = basketbolViewModel.teamAPoints.toString()
+//        }
+//        buttonBPT3.setOnClickListener {
+//            basketbolViewModel.updatePts("B", 3)
+//            textBPTS.text = basketbolViewModel.teamBPoints.toString()
+//        }
+//        buttonBPT2.setOnClickListener {
+//            basketbolViewModel.updatePts("B", 2)
+//            textBPTS.text = basketbolViewModel.teamBPoints.toString()
+//        }
+//        buttonBPT1.setOnClickListener {
+//            basketbolViewModel.updatePts("B", 1)
+//            textBPTS.text = basketbolViewModel.teamBPoints.toString()
+//        }
+//
+//        buttonReset.setOnClickListener {
+//            basketbolViewModel.reset()
+//            textAPTS.text = basketbolViewModel.teamAPoints.toString()
+//            textBPTS.text = basketbolViewModel.teamBPoints.toString()
+//        }
+
+
+//        displayButton.setOnClickListener {
+////            val isClicked = basketbolViewModel.butIsClicked
+//            val intent = context?.let { it1 -> BASKETBOL2.newIntent(it1,basketbolViewModel.butIsClicked) }
+//            startActivityForResult(intent, REQUEST_CODE_CLICKED)
+//        }
+
+    }
+
+
+    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState: Bundle?) : View?{
+        val view = inflater.inflate(R.layout.fragment_basketbol, container,false)
+        buttonAPT3 = view.findViewById(R.id.buttonAPT3) as Button
+        buttonAPT2 = view.findViewById(R.id.buttonAPT2) as Button
+        buttonAPT1 = view.findViewById(R.id.buttonAPT1) as Button
+        buttonBPT3 = view.findViewById(R.id.buttonBPT3) as Button
+        buttonBPT2 = view.findViewById(R.id.buttonBPT2) as Button
+        buttonBPT1 = view.findViewById(R.id.buttonBPT1) as Button
+        buttonReset = view.findViewById(R.id.buttonReset) as Button
+        displayButton = view.findViewById(R.id.displayButton) as Button
+        textA = view.findViewById(R.id.textA) as TextView
+        textAPTS = view.findViewById(R.id.textAPTS) as TextView
+        textB = view.findViewById(R.id.textB) as TextView
+        textBPTS = view.findViewById(R.id.textBPTS) as TextView
         val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
         basketbolViewModel.teams[0].score = aScore
         textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -73,29 +137,11 @@ class main_fragment : Fragment() {
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
         }
 
-        /*
         displayButton.setOnClickListener {
-            val isClicked = basketbolViewModel.butIsClicked
-            val intent = BASKETBOL2.newIntent(this@main_fragment,basketbolViewModel.butIsClicked)
-            startActivityForResult(intent, REQUEST_CODE_CLICKED)
+           val isClicked = basketbolViewModel.butIsClicked
+            val intent = context?.let { it1 -> BASKETBOL2.newIntent(it1, basketbolViewModel.butIsClicked) }
+           startActivityForResult(intent, REQUEST_CODE_CLICKED)
         }
-         */
-    }
-
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState: Bundle?) : View?{
-        val view = inflater.inflate(R.layout.fragment_basketbol, container,false)
-        buttonAPT3 = view.findViewById(R.id.buttonAPT3) as Button
-        buttonAPT2 = view.findViewById(R.id.buttonAPT2) as Button
-        buttonAPT1 = view.findViewById(R.id.buttonAPT1) as Button
-        buttonBPT3 = view.findViewById(R.id.buttonBPT3) as Button
-        buttonBPT2 = view.findViewById(R.id.buttonBPT2) as Button
-        buttonBPT1 = view.findViewById(R.id.buttonBPT1) as Button
-        buttonReset = view.findViewById(R.id.buttonReset) as Button
-        displayButton = view.findViewById(R.id.displayButton) as Button
-        textA = view.findViewById(R.id.textA) as TextView
-        textAPTS = view.findViewById(R.id.textAPTS) as TextView
-        textB = view.findViewById(R.id.textB) as TextView
-        textBPTS = view.findViewById(R.id.textBPTS) as TextView
         return view
     }
 
@@ -113,7 +159,6 @@ class main_fragment : Fragment() {
             Log.d(TAG, "updated button on homepage");
         }
     }
-
 
     override fun onStart() {
         super.onStart()
