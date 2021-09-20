@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.example.basketbol1.R
 import com.example.basketbol1.Team
+
 //import com.example.myapplication.R
 //import com.example.myapplication.Team
 
@@ -46,9 +47,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if(currentFragment == null){
+        if (currentFragment == null) {
             val fragment = BBGameListFragment.newInstance()
-            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+                .commit()
         }
 
 //        Log.d(TAG, "Got a BasketbolViewModel: $basketbolViewModel")
@@ -109,7 +111,6 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-
     }
 
 //    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
@@ -161,5 +162,5 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
-    }
+}
 

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -16,7 +17,7 @@ private const val TAG = "BBGameListFragment"
 class BBGameListFragment : Fragment() {
     private lateinit var bbgameRecyclerView: RecyclerView
     private var adapter: BBGameAdapter? = null
-    private val bbgameViewModel : BBGameViewModel by lazy {
+    private val bbgameViewModel: BBGameViewModel by lazy {
 
         ViewModelProviders.of(this).get(BBGameViewModel::class.java)
     }
@@ -49,16 +50,29 @@ class BBGameListFragment : Fragment() {
         private val teamsTextView: TextView = itemView.findViewById(R.id.game_teams)
         private val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         private val scoreTextView: TextView = itemView.findViewById(R.id.game_score)
+        private val redFuego : ImageView = itemView.findViewById(R.id.red_fuego)
+        private val blueFuego : ImageView = itemView.findViewById(R.id.blue_fuego)
 
         fun bind(bbGame: BBGame) {
             this.bbGame = bbGame
             teamsTextView.text = bbGame.team1.teamName + " vs. " + bbGame.team2.teamName
             dateTextView.text = bbGame.date.toString()
             scoreTextView.text = bbGame.team1.score.toString() + ":" + bbGame.team2.score.toString()
+
+            /*
+            redFuego.visibility = if(bbGame.team1.score != bbGame.team2.score){
+                View.VISIBLE
+            } else {
+                View.GONE
+                blueFuego.visibility
+            }
+
+             */
         }
     }
 
-    private inner class BBGameAdapter(var bbgames: List<BBGame>) : RecyclerView.Adapter<BBGameHolder>() {
+    private inner class BBGameAdapter(var bbgames: List<BBGame>) :
+        RecyclerView.Adapter<BBGameHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BBGameHolder {
             val view = layoutInflater.inflate(R.layout.list_item_bbgame, parent, false)
             return BBGameHolder(view)
@@ -74,7 +88,7 @@ class BBGameListFragment : Fragment() {
         }
     }
 
-    companion object{
+    companion object {
         fun newInstance(): BBGameListFragment {
             return BBGameListFragment()
         }

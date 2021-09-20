@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">BASKETBOL1</string>
-    <string name= "team_a">Team A</string>
-    <string name = "team_b">Team B</string>
-    <string name= "point_one">0</string>
-    <string name= "point_two">0</string>
-    <string name= "three_pointer">   +3 POINTS   </string>
-    <string name= "two_pointer">   +2 POINTS  </string>
-    <string name= "free_throw">FREE THROW</string>
-    <string name= "reset">RESET</string>
-    <string name= "clickA">Unclicked</string>
-    <string name= "clickB">Clicked</string>
+    <string name="team_a">Team A</string>
+    <string name="team_b">Team B</string>
+    <string name="point_one">0</string>
+    <string name="point_two">0</string>
+    <string name="three_pointer">   +3 POINTS   </string>
+    <string name="two_pointer">   +2 POINTS  </string>
+    <string name="free_throw">FREE THROW</string>
+    <string name="reset">RESET</string>
+    <string name="clickA">Unclicked</string>
+    <string name="clickB">Clicked</string>
 
 </resources>

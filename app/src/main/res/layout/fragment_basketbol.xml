@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background = "@color/light_orange"
+    android:background="@color/light_orange"
     tools:context=".MainActivity">
 
     <ImageView
@@ -57,13 +57,14 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/three_pointer" />
 
-            <Button style = "@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            <Button
+                style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
                 android:id="@+id/buttonAPT2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="@string/two_pointer"/>
+                android:text="@string/two_pointer" />
 
             <Button
                 android:id="@+id/buttonAPT1"

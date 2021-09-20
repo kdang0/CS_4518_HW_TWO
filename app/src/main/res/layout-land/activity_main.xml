@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background = "@color/light_orange"
+    android:background="@color/light_orange"
     tools:context=".MainActivity">
 
     <ImageView
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity = "center|bottom">
+        android:layout_gravity="center|bottom">
 
         <LinearLayout
             android:layout_width="170dp"

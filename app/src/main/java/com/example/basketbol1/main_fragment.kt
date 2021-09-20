@@ -12,10 +12,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+
 private const val TAG = "MainActivity"
 private const val KEY_AScore = "AScore"
 private const val KEY_BScore = "BScore"
 private const val REQUEST_CODE_CLICKED = 0
+
 class main_fragment : Fragment() {
     private lateinit var textA: TextView
     private lateinit var textAPTS: TextView
@@ -28,8 +30,8 @@ class main_fragment : Fragment() {
     private lateinit var buttonBPT2: Button
     private lateinit var buttonBPT1: Button
     private lateinit var buttonReset: Button
-    private lateinit var displayButton : Button
-    private lateinit var mContext : Context
+    private lateinit var displayButton: Button
+    private lateinit var mContext: Context
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
     }
@@ -86,8 +88,12 @@ class main_fragment : Fragment() {
     }
 
 
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState: Bundle?) : View?{
-        val view = inflater.inflate(R.layout.fragment_basketbol, container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_basketbol, container, false)
         buttonAPT3 = view.findViewById(R.id.buttonAPT3) as Button
         buttonAPT2 = view.findViewById(R.id.buttonAPT2) as Button
         buttonAPT1 = view.findViewById(R.id.buttonAPT1) as Button
@@ -139,25 +145,28 @@ class main_fragment : Fragment() {
         }
 
         displayButton.setOnClickListener {
-           val isClicked = basketbolViewModel.butIsClicked
-            val intent = context?.let { it1 -> BASKETBOL2.newIntent(it1, basketbolViewModel.butIsClicked) }
-           startActivityForResult(intent, REQUEST_CODE_CLICKED)
+            val isClicked = basketbolViewModel.butIsClicked
+            val intent =
+                context?.let { it1 -> BASKETBOL2.newIntent(it1, basketbolViewModel.butIsClicked) }
+            startActivityForResult(intent, REQUEST_CODE_CLICKED)
         }
         return view
     }
 
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode != Activity.RESULT_OK)
-        {return}
-        if(requestCode == REQUEST_CODE_CLICKED){
-            basketbolViewModel.butIsClicked = data?.getBooleanExtra(IS_CLICKED_TWO, false)?:false
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_CODE_CLICKED) {
+            basketbolViewModel.butIsClicked = data?.getBooleanExtra(IS_CLICKED_TWO, false) ?: false
             val resultClick = when {
                 basketbolViewModel.butIsClicked -> R.string.clickB
                 else -> R.string.clickA
             }
             displayButton.setText(resultClick)
-            Log.d(TAG, "updated button on homepage");
+            Log.d(TAG, "updated button on homepage")
+
         }
     }
 
