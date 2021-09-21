@@ -59,15 +59,14 @@ class BBGameListFragment : Fragment() {
             dateTextView.text = bbGame.date.toString()
             scoreTextView.text = bbGame.team1.score.toString() + ":" + bbGame.team2.score.toString()
 
-            /*
-            redFuego.visibility = if(bbGame.team1.score != bbGame.team2.score){
+
+            redFuego.visibility = if(bbGame.team1.score > bbGame.team2.score){
                 View.VISIBLE
             } else {
                 View.GONE
-                blueFuego.visibility
             }
 
-             */
+
         }
     }
 
