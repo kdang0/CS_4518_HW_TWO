@@ -7,6 +7,7 @@ private const val TAG = "BasketbolViewModel"
 
 
 class BasketbolViewModel : ViewModel() {
+    private val BBGameRepository = com.example.basketbol1.BBGameRepository.get()
 
     var teams = listOf(
         Team(R.string.team_a, 0),
@@ -32,5 +33,9 @@ class BasketbolViewModel : ViewModel() {
         teamAPoints = 0
         teamBPoints = 0
         Log.d(TAG, "reset points")
+    }
+
+    fun saveBBGame(bbGame: BBGame) {
+        BBGameRepository.updateBBGame(bbGame)
     }
 }

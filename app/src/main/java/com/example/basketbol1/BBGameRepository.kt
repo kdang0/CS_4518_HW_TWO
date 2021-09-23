@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.basketbol1.localdatabase.BBGameDatabase
 import java.util.*
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "game-database"
 class BBGameRepository private constructor(context : Context) {
@@ -14,9 +15,23 @@ class BBGameRepository private constructor(context : Context) {
         BBGameDatabase::class.java,
         DATABASE_NAME
     ).build()
+
+    private val executor = Executors.newSingleThreadExecutor()
     
     fun getBBGames() : LiveData<List<BBGame>> = database.BBGameDao().getBBGames()
     fun getBBGame(id : UUID) : LiveData<BBGame?> = database.BBGameDao().getBBGame(id)
+
+    fun updateBBGame(bbGame: BBGame) {
+        executor.execute {
+            database.BBGameDao().updateGame(bbGame)
+        }
+    }
+
+    fun addBBGame(bbGame: BBGame) {
+        executor.execute {
+            database.BBGameDao().addGame(bbGame)
+        }
+    }
     
     companion object{
         private var INSTANCE: BBGameRepository? = null

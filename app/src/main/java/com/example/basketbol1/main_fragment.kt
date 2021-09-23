@@ -193,6 +193,7 @@ class main_fragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")
+        basketbolViewModel.saveBBGame(bbGame)
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
