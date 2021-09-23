@@ -1,5 +1,6 @@
 package com.example.basketbol1.localdatabase
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.basketbol1.BBGame
@@ -9,8 +10,8 @@ import java.util.*
 interface BBGameDao {
 
     @Query("SELECT * FROM table_game")
-    fun getBBGames(): List<BBGame>
+    fun getBBGames(): LiveData<List<BBGame>>
 
     @Query("SELECT * FROM table_game WHERE id=(:id)")
-    fun getBBGame(id: UUID): BBGame?
+    fun getBBGame(id: UUID): LiveData<BBGame?>
 }

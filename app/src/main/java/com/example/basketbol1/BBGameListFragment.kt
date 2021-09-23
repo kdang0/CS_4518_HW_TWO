@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,16 +17,17 @@ private const val TAG = "BBGameListFragment"
 
 class BBGameListFragment : Fragment() {
     private lateinit var bbgameRecyclerView: RecyclerView
-    private var adapter: BBGameAdapter? = null
+    private var adapter: BBGameAdapter? = BBGameAdapter(emptyList())
     private val bbgameViewModel: BBGameViewModel by lazy {
 
         ViewModelProviders.of(this).get(BBGameViewModel::class.java)
     }
-
+    /*
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Total games: ${bbgameViewModel.bbgames.size}")
     }
+     */
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,14 +37,28 @@ class BBGameListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_game_list, container, false)
         bbgameRecyclerView = view.findViewById(R.id.bbgame_recycler_view) as RecyclerView
         bbgameRecyclerView.layoutManager = LinearLayoutManager(context)
-        updateUI()
+//        updateUI()
+        bbgameRecyclerView.adapter = adapter
         return view
     }
 
-    private fun updateUI() {
-        val bbgames = bbgameViewModel.bbgames
+    private fun updateUI(bbgames : List<BBGame>) {
+//        val bbgames = bbgameViewModel.bbgames
         adapter = BBGameAdapter(bbgames)
         bbgameRecyclerView.adapter = adapter
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bbgameViewModel.BBGamesLiveData.observe(
+            viewLifecycleOwner,
+            Observer {
+                bbgames ->
+                bbgames?.let {
+                    Log.i(TAG, "Got games $" + bbgames.size)
+                    updateUI(bbgames)
+                }
+            })
     }
 
     private inner class BBGameHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -55,12 +71,12 @@ class BBGameListFragment : Fragment() {
 
         fun bind(bbGame: BBGame) {
             this.bbGame = bbGame
-            teamsTextView.text = bbGame.team1.teamName + " vs. " + bbGame.team2.teamName
+            teamsTextView.text = bbGame.teamAName + " vs. " + bbGame.teamBName
             dateTextView.text = bbGame.date.toString()
-            scoreTextView.text = bbGame.team1.score.toString() + ":" + bbGame.team2.score.toString()
+            scoreTextView.text = bbGame.teamAScore.toString() + ":" + bbGame.teamBScore.toString()
 
 
-            redFuego.visibility = if(bbGame.team1.score > bbGame.team2.score){
+            redFuego.visibility = if(bbGame.teamAScore > bbGame.teamBScore){
                 View.VISIBLE
             } else {
                 View.GONE

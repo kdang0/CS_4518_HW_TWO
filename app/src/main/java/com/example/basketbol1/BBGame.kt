@@ -8,7 +8,11 @@ import java.util.*
 @Entity(tableName = "table_game")
 data class BBGame(
     @PrimaryKey val id:UUID = UUID.randomUUID(),
-    @ColumnInfo(name= "col_game") var date: Date = Date(),
-    var team1: Team2 = Team2("Team A", 0),
-    var team2: Team2 = Team2("Team B", 1)
+    var teamAName : String = "A Team",
+    var teamBName : String = "B team",
+    var teamAScore: Int = 1,
+    var teamBScore: Int = 0,
+    @ColumnInfo(name= "date") var date: Date = Date()
 )
+
+

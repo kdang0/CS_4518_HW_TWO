@@ -8,7 +8,8 @@
     <string name="two_pointer">   +2 POINTS  </string>
     <string name="free_throw">FREE THROW</string>
     <string name="reset">RESET</string>
-    <string name="clickA">Unclicked</string>
-    <string name="clickB">Clicked</string>
+    <string name="clickA">Save</string>
+    <string name="clickB">Saved</string>
+    <string name="display">Display</string>
 
 </resources>

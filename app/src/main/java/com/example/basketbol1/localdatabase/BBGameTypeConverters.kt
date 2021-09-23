@@ -1,6 +1,7 @@
 package com.example.basketbol1.localdatabase
 
 import androidx.room.TypeConverter
+import com.example.basketbol1.Team2
 import java.util.*
 
 class BBGameTypeConverters {
@@ -26,4 +27,6 @@ class BBGameTypeConverters {
             Date(it)
         }
     }
+
+
 }

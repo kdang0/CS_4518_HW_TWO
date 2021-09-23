@@ -202,4 +202,10 @@ class main_fragment : Fragment() {
         savedInstanceState.putInt(KEY_BScore, basketbolViewModel.teams[1].score)
 
     }
+
+    companion object {
+        fun newInstance(): main_fragment {
+            return main_fragment()
+        }
+    }
 }
