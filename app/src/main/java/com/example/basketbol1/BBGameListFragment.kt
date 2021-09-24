@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 private const val TAG = "BBGameListFragment"
+private const val ARG_A_Win = "did_A_Win?"
 
 class BBGameListFragment : Fragment() {
     /**
@@ -66,15 +67,41 @@ class BBGameListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bbgameViewModel.BBGamesLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                bbgames ->
-                bbgames?.let {
-                    Log.i(TAG, "Got games" + bbgames.size)
-                    updateUI(bbgames)
-                }
-            })
+        if(arguments != null) {
+            if (arguments?.getBoolean(ARG_A_Win, true) == true) {
+                bbgameViewModel.BBGamesALiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                            bbgames ->
+                        bbgames?.let {
+                            Log.i(TAG, "Got games" + bbgames.size)
+                            updateUI(bbgames)
+                        }
+                    })
+            }
+            else {
+                bbgameViewModel.BBGamesBLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                            bbgames ->
+                        bbgames?.let {
+                            Log.i(TAG, "Got games" + bbgames.size)
+                            updateUI(bbgames)
+                        }
+                    })
+            }
+        }
+        else {
+            bbgameViewModel.BBGamesLiveData.observe(
+                viewLifecycleOwner,
+                Observer {
+                        bbgames ->
+                    bbgames?.let {
+                        Log.i(TAG, "Got games" + bbgames.size)
+                        updateUI(bbgames)
+                    }
+                })
+        }
     }
 
     override fun onDetach() {
@@ -119,13 +146,6 @@ class BBGameListFragment : Fragment() {
         RecyclerView.Adapter<BBGameHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BBGameHolder {
             val view = layoutInflater.inflate(R.layout.list_item_bbgame, parent, false)
-            if (bbgames.size < 150) {
-                val neededLoops = 150 - bbgames.size
-                for (i in 1..neededLoops) {
-                    val newBBGame = BBGame()
-                    BBGameRepository.addBBGame(newBBGame)
-                }
-            }
             return BBGameHolder(view)
         }
 
@@ -142,6 +162,15 @@ class BBGameListFragment : Fragment() {
     companion object {
         fun newInstance(): BBGameListFragment {
             return BBGameListFragment()
+        }
+
+        fun newInstance(teamAWin: Boolean): BBGameListFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_A_Win, teamAWin)
+            }
+            return BBGameListFragment().apply {
+                arguments = args
+            }
         }
     }
 }

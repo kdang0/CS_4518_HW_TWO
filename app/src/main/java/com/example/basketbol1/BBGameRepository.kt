@@ -20,6 +20,8 @@ class BBGameRepository private constructor(context : Context) {
     
     fun getBBGames() : LiveData<List<BBGame>> = database.BBGameDao().getBBGames()
     fun getBBGame(id : UUID) : LiveData<BBGame?> = database.BBGameDao().getBBGame(id)
+    fun getBBGameAWin() : LiveData<List<BBGame>> = database.BBGameDao().getBBGameAWin()
+    fun getBBGameBWin() : LiveData<List<BBGame>> = database.BBGameDao().getBBGameBWin()
 
     fun updateBBGame(bbGame: BBGame) {
         executor.execute {

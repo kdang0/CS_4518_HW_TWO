@@ -17,6 +17,12 @@ interface BBGameDao {
     @Query("SELECT * FROM table_game WHERE id=(:id)")
     fun getBBGame(id: UUID): LiveData<BBGame?>
 
+    @Query("SELECT * FROM table_game WHERE teamAScore > teamBScore")
+    fun getBBGameAWin(): LiveData<List<BBGame>>
+
+    @Query("SELECT * FROM table_game WHERE teamBScore > teamAScore")
+    fun getBBGameBWin(): LiveData<List<BBGame>>
+
     @Update
     fun updateGame(bbGame: BBGame)
 

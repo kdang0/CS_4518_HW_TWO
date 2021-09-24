@@ -45,6 +45,10 @@ class main_fragment : Fragment() {
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
     }
+    interface MainCallbacks {
+        fun onDisplay(teamAWin: Boolean)
+    }
+    private var mainCallbacks: MainCallbacks? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -98,6 +102,11 @@ class main_fragment : Fragment() {
 //            startActivityForResult(intent, REQUEST_CODE_CLICKED)
 //        }
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainCallbacks = context as MainCallbacks?
     }
 
 
@@ -167,10 +176,8 @@ class main_fragment : Fragment() {
         }
 
         displayButton.setOnClickListener {
-            val isClicked = basketbolViewModel.butIsClicked
-            val intent =
-                context?.let { it1 -> BASKETBOL2.newIntent(it1, basketbolViewModel.butIsClicked) }
-            startActivityForResult(intent, REQUEST_CODE_CLICKED)
+            val didAWin = (bbGame.teamAScore > bbGame.teamBScore)
+            mainCallbacks?.onDisplay(didAWin)
         }
 
         saveButton.setOnClickListener {
@@ -190,6 +197,11 @@ class main_fragment : Fragment() {
                 updateUI()
             }
         })
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mainCallbacks = null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

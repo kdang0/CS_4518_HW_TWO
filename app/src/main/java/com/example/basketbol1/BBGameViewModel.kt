@@ -3,6 +3,7 @@ package com.example.basketbol1
 import androidx.lifecycle.ViewModel
 
 class BBGameViewModel : ViewModel() {
+    val whoWon: Boolean = false
     val bbgames = mutableListOf<BBGame>()
 /*
     init {
@@ -18,5 +19,6 @@ class BBGameViewModel : ViewModel() {
 
     private val BBGameRepository = com.example.basketbol1.BBGameRepository.get()
     val BBGamesLiveData = BBGameRepository.getBBGames()
-
+    val BBGamesALiveData = BBGameRepository.getBBGameAWin()
+    val BBGamesBLiveData = BBGameRepository.getBBGameBWin()
 }
