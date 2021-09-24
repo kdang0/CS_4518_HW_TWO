@@ -34,12 +34,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+            <EditText
                 android:id="@+id/textA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/team_a" />
+                android:text="@string/team_a"
+                android:inputType="text"/>
 
             <TextView
                 android:id="@+id/textAPTS"
@@ -86,12 +87,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+            <EditText
                 android:id="@+id/textB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/team_b" />
+                android:text="@string/team_b"
+                android:inputType="text"
+                />
 
             <TextView
                 android:id="@+id/textBPTS"

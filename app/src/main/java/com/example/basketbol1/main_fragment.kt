@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -19,13 +20,15 @@ private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
 private const val KEY_BScore = "BScore"
 private const val ARG_BBGAME_ID = "bbgame_id"
+private const val KEY_AName = "TeamA"
+private const val KEY_BName = "TeamB"
 private const val REQUEST_CODE_CLICKED = 0
 
 class main_fragment : Fragment() {
     private lateinit var bbGame: BBGame
-    private lateinit var textA: TextView
+    private lateinit var textA: EditText
     private lateinit var textAPTS: TextView
-    private lateinit var textB: TextView
+    private lateinit var textB: EditText
     private lateinit var textBPTS: TextView
     private lateinit var buttonAPT3: Button
     private lateinit var buttonAPT2: Button
@@ -111,9 +114,9 @@ class main_fragment : Fragment() {
         buttonReset = view.findViewById(R.id.buttonReset) as Button
         displayButton = view.findViewById(R.id.displayButton) as Button
         saveButton = view.findViewById(R.id.saveButton) as Button
-        textA = view.findViewById(R.id.textA) as TextView
+        textA = view.findViewById(R.id.textA) as EditText
         textAPTS = view.findViewById(R.id.textAPTS) as TextView
-        textB = view.findViewById(R.id.textB) as TextView
+        textB = view.findViewById(R.id.textB) as EditText
         textBPTS = view.findViewById(R.id.textBPTS) as TextView
         val aScore = 0
         basketbolViewModel.teams[0].score = aScore
@@ -242,8 +245,13 @@ class main_fragment : Fragment() {
         Log.i(TAG, "onSavedInstanceState")
         savedInstanceState.putInt(KEY_AScore, basketbolViewModel.teams[0].score)
         savedInstanceState.putInt(KEY_BScore, basketbolViewModel.teams[1].score)
+        savedInstanceState.putString(KEY_AName, basketbolViewModel.teams[0].teamName)
+        savedInstanceState.putString(KEY_BName, basketbolViewModel.teams[1].teamName)
 
     }
+
+
+
 
     companion object {
         fun newInstance(bbgameID: UUID): main_fragment {

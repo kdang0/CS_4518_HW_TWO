@@ -71,7 +71,7 @@ class BBGameListFragment : Fragment() {
             Observer {
                 bbgames ->
                 bbgames?.let {
-                    Log.i(TAG, "Got games $" + bbgames.size)
+                    Log.i(TAG, "Got games" + bbgames.size)
                     updateUI(bbgames)
                 }
             })

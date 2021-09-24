@@ -19,13 +19,17 @@ class BasketbolViewModel : ViewModel() {
     }
 
     var teams = listOf(
-        Team(R.string.team_a, 0),
-        Team(R.string.team_b, 0)
+        Team2("Team A", 0),
+        Team2("Team B", 0)
     )
 
     var teamAPoints: Int = teams[0].score
 
+    var teamAName : String = teams[0].teamName
+
     var teamBPoints: Int = teams[1].score
+
+    var teamBName : String = teams[1].teamName
 
     var butIsClicked: Boolean = false
 
