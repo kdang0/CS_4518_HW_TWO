@@ -1,5 +1,6 @@
 package com.example.basketbol1
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,15 +13,29 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 private const val TAG = "BBGameListFragment"
 
 class BBGameListFragment : Fragment() {
+    /**
+     * Required interface for hosting activities
+     */
+    interface Callbacks {
+        fun onGameSelected(bbgameID: UUID)
+    }
+    private var callbacks: Callbacks? = null
+
     private lateinit var bbgameRecyclerView: RecyclerView
     private var adapter: BBGameAdapter? = BBGameAdapter(emptyList())
     private val bbgameViewModel: BBGameViewModel by lazy {
 
         ViewModelProviders.of(this).get(BBGameViewModel::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
     }
     /*
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,13 +76,22 @@ class BBGameListFragment : Fragment() {
             })
     }
 
-    private inner class BBGameHolder(view: View) : RecyclerView.ViewHolder(view) {
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
+
+    private inner class BBGameHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var bbGame: BBGame
         private val teamsTextView: TextView = itemView.findViewById(R.id.game_teams)
         private val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         private val scoreTextView: TextView = itemView.findViewById(R.id.game_score)
         private val redFuego : ImageView = itemView.findViewById(R.id.red_fuego)
         private val blueFuego : ImageView = itemView.findViewById(R.id.blue_fuego)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun bind(bbGame: BBGame) {
             this.bbGame = bbGame
@@ -83,6 +107,10 @@ class BBGameListFragment : Fragment() {
             }
 
 
+        }
+
+        override fun onClick(v: View) {
+            callbacks?.onGameSelected(bbGame.id)
         }
     }
 

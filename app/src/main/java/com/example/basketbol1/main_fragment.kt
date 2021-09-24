@@ -12,13 +12,17 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import java.util.*
 
-private const val TAG = "MainActivity"
+private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
 private const val KEY_BScore = "BScore"
+private const val ARG_BBGAME_ID = "bbgame_id"
 private const val REQUEST_CODE_CLICKED = 0
 
 class main_fragment : Fragment() {
+    private lateinit var bbGame: BBGame
     private lateinit var textA: TextView
     private lateinit var textAPTS: TextView
     private lateinit var textB: TextView
@@ -31,6 +35,7 @@ class main_fragment : Fragment() {
     private lateinit var buttonBPT1: Button
     private lateinit var buttonReset: Button
     private lateinit var displayButton: Button
+    private lateinit var saveButton: Button
     private lateinit var mContext: Context
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
@@ -41,6 +46,9 @@ class main_fragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         Log.d(TAG, "Got a BasketbolViewModel: $basketbolViewModel")
+        val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
+        Log.d(TAG, "args bundle bbgame ID: $bbgameID")
+        basketbolViewModel.loadBBGame(bbgameID)
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
 //        textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -102,6 +110,7 @@ class main_fragment : Fragment() {
         buttonBPT1 = view.findViewById(R.id.buttonBPT1) as Button
         buttonReset = view.findViewById(R.id.buttonReset) as Button
         displayButton = view.findViewById(R.id.displayButton) as Button
+        saveButton = view.findViewById(R.id.saveButton) as Button
         textA = view.findViewById(R.id.textA) as TextView
         textAPTS = view.findViewById(R.id.textAPTS) as TextView
         textB = view.findViewById(R.id.textB) as TextView
@@ -150,7 +159,22 @@ class main_fragment : Fragment() {
                 context?.let { it1 -> BASKETBOL2.newIntent(it1, basketbolViewModel.butIsClicked) }
             startActivityForResult(intent, REQUEST_CODE_CLICKED)
         }
+
+        saveButton.setOnClickListener {
+            basketbolViewModel.saveBBGame(bbGame)
+        }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        basketbolViewModel.bbGameLiveData.observe(viewLifecycleOwner, Observer {
+            bbGame -> bbGame?.let {
+                this.bbGame = bbGame
+                updateUI()
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -168,6 +192,13 @@ class main_fragment : Fragment() {
             Log.d(TAG, "updated button on homepage")
 
         }
+    }
+
+    private fun updateUI() {
+        textA.setText(bbGame.teamAName)
+        textB.setText(bbGame.teamBName)
+        textAPTS.setText(bbGame.teamAScore.toString())
+        textBPTS.setText(bbGame.teamBScore.toString())
     }
 
     override fun onStart() {
@@ -205,8 +236,13 @@ class main_fragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): main_fragment {
-            return main_fragment()
+        fun newInstance(bbgameID: UUID): main_fragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_BBGAME_ID, bbgameID)
+            }
+            return main_fragment().apply {
+                arguments = args
+            }
         }
     }
 }

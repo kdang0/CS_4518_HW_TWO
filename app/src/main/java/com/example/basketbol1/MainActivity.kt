@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.example.basketbol1.R
 import com.example.basketbol1.Team
+import java.util.*
 
 //import com.example.myapplication.R
 //import com.example.myapplication.Team
@@ -24,7 +25,7 @@ private const val TAG = "MainActivity"
 //private const val KEY_BScore = "BScore"
 //private const val REQUEST_CODE_CLICKED = 0
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks {
 
 //    private lateinit var textA: TextView
 //    private lateinit var textAPTS: TextView
@@ -111,6 +112,12 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
+    }
+
+    override fun onGameSelected(bbgameID: UUID) {
+        Log.d(TAG, "MainActivity.onGameSelected: $bbgameID")
+        val fragment = main_fragment.newInstance(bbgameID)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 
 //    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
