@@ -28,6 +28,7 @@ class BBGameListFragment : Fragment() {
 
     private lateinit var bbgameRecyclerView: RecyclerView
     private var adapter: BBGameAdapter? = BBGameAdapter(emptyList())
+    private val BBGameRepository = com.example.basketbol1.BBGameRepository.get()
     private val bbgameViewModel: BBGameViewModel by lazy {
 
         ViewModelProviders.of(this).get(BBGameViewModel::class.java)
@@ -118,6 +119,13 @@ class BBGameListFragment : Fragment() {
         RecyclerView.Adapter<BBGameHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BBGameHolder {
             val view = layoutInflater.inflate(R.layout.list_item_bbgame, parent, false)
+            if (bbgames.size < 150) {
+                val neededLoops = 150 - bbgames.size
+                for (i in 1..neededLoops) {
+                    val newBBGame = BBGame()
+                    BBGameRepository.addBBGame(newBBGame)
+                }
+            }
             return BBGameHolder(view)
         }
 

@@ -17,7 +17,6 @@ class BBGameViewModel : ViewModel() {
  */
 
     private val BBGameRepository = com.example.basketbol1.BBGameRepository.get()
-    //if goes here
     val BBGamesLiveData = BBGameRepository.getBBGames()
 
 }

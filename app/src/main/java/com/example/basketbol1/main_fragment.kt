@@ -115,34 +115,40 @@ class main_fragment : Fragment() {
         textAPTS = view.findViewById(R.id.textAPTS) as TextView
         textB = view.findViewById(R.id.textB) as TextView
         textBPTS = view.findViewById(R.id.textBPTS) as TextView
-        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
+        val aScore = 0
         basketbolViewModel.teams[0].score = aScore
         textAPTS.text = basketbolViewModel.teamAPoints.toString()
-        val bScore = savedInstanceState?.getInt(KEY_BScore, 0) ?: 0
+        val bScore = 0
         basketbolViewModel.teams[1].score = bScore
         textBPTS.text = basketbolViewModel.teamBPoints.toString()
         buttonAPT3.setOnClickListener {
             basketbolViewModel.updatePts("A", 3)
+            bbGame.teamAScore += 3
             textAPTS.text = basketbolViewModel.teamAPoints.toString()
         }
         buttonAPT2.setOnClickListener {
             basketbolViewModel.updatePts("A", 2)
+            bbGame.teamAScore += 2
             textAPTS.text = basketbolViewModel.teamAPoints.toString()
         }
         buttonAPT1.setOnClickListener {
             basketbolViewModel.updatePts("A", 1)
+            bbGame.teamAScore += 1
             textAPTS.text = basketbolViewModel.teamAPoints.toString()
         }
         buttonBPT3.setOnClickListener {
             basketbolViewModel.updatePts("B", 3)
+            bbGame.teamBScore += 3
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
         }
         buttonBPT2.setOnClickListener {
             basketbolViewModel.updatePts("B", 2)
+            bbGame.teamBScore += 2
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
         }
         buttonBPT1.setOnClickListener {
             basketbolViewModel.updatePts("B", 1)
+            bbGame.teamBScore += 1
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
         }
 
@@ -150,6 +156,8 @@ class main_fragment : Fragment() {
             basketbolViewModel.reset()
             textAPTS.text = basketbolViewModel.teamAPoints.toString()
             textBPTS.text = basketbolViewModel.teamBPoints.toString()
+            bbGame.teamAScore = 0
+            bbGame.teamBScore = 0
             Log.d(TAG, "Reset done.")
         }
 
@@ -172,6 +180,8 @@ class main_fragment : Fragment() {
         basketbolViewModel.bbGameLiveData.observe(viewLifecycleOwner, Observer {
             bbGame -> bbGame?.let {
                 this.bbGame = bbGame
+                basketbolViewModel.teamAPoints = bbGame.teamAScore
+                basketbolViewModel.teamBPoints = bbGame.teamBScore
                 updateUI()
             }
         })
