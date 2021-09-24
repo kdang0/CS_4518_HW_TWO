@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -217,6 +219,34 @@ class main_fragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
+        val textAWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //space left blank
+            }
+
+            override fun onTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+                bbGame.teamAName = sequence.toString()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                //also blank
+            }
+        }
+        textA.addTextChangedListener(textAWatcher)
+        val textBWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //space left blank
+            }
+
+            override fun onTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+                bbGame.teamBName = sequence.toString()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                //also blank
+            }
+        }
+        textB.addTextChangedListener(textBWatcher)
     }
 
     override fun onPause() {
