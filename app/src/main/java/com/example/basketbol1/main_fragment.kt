@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
 import java.util.*
+import androidx.appcompat.app.AppCompatActivity
 
 private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
@@ -42,6 +44,7 @@ class main_fragment : Fragment() {
     private lateinit var displayButton: Button
     private lateinit var saveButton: Button
     private lateinit var mContext: Context
+    private lateinit var basketbolIcon : ImageView
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
     }
@@ -129,6 +132,7 @@ class main_fragment : Fragment() {
         textAPTS = view.findViewById(R.id.textAPTS) as TextView
         textB = view.findViewById(R.id.textB) as EditText
         textBPTS = view.findViewById(R.id.textBPTS) as TextView
+        basketbolIcon = view.findViewById(R.id.bbIcon) as ImageView
         val aScore = 0
         basketbolViewModel.teams[0].score = aScore
         textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -183,6 +187,8 @@ class main_fragment : Fragment() {
         saveButton.setOnClickListener {
             basketbolViewModel.saveBBGame(bbGame)
         }
+
+
         return view
     }
 

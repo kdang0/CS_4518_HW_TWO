@@ -3,9 +3,7 @@ package com.example.basketbol1
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -39,12 +37,12 @@ class BBGameListFragment : Fragment() {
         super.onAttach(context)
         callbacks = context as Callbacks?
     }
-    /*
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total games: ${bbgameViewModel.bbgames.size}")
+        setHasOptionsMenu(true)
     }
-     */
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +62,24 @@ class BBGameListFragment : Fragment() {
         adapter = BBGameAdapter(bbgames)
         bbgameRecyclerView.adapter = adapter
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_bbgame_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.new_game -> {
+                val game = BBGame()
+                bbgameViewModel.addBBGame(game)
+                callbacks?.onGameSelected(game.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,6 +124,8 @@ class BBGameListFragment : Fragment() {
         super.onDetach()
         callbacks = null
     }
+
+
 
     private inner class BBGameHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var bbGame: BBGame

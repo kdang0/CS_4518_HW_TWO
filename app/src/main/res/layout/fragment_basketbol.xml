@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/bbIcon"
         android:layout_width="109dp"
         android:layout_height="107dp"
         android:layout_marginLeft="5dp"

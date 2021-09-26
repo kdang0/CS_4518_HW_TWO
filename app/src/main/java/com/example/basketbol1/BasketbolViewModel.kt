@@ -42,6 +42,10 @@ class BasketbolViewModel : ViewModel() {
         Log.d(TAG, "updated points")
     }
 
+    fun addBBGame(bbgame : BBGame){
+        BBGameRepository.addBBGame(bbgame)
+    }
+
     fun reset() {
         teamAPoints = 0
         teamBPoints = 0

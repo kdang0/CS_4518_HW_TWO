@@ -13,10 +13,12 @@
         >
         <activity
             android:name=".BASKETBOL2"
-            android:exported="true" />
+            android:exported="true"
+           />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

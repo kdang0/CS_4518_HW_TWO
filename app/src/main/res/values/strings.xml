@@ -11,5 +11,6 @@
     <string name="clickA">Save</string>
     <string name="clickB">Saved</string>
     <string name="display">Display</string>
+    <string name = "new_game">New Game</string>
 
 </resources>

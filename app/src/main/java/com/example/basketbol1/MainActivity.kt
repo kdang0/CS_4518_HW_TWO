@@ -43,11 +43,13 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 //        ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
 //   }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        this.supportActionBar?.setDisplayShowTitleEnabled(false)
         if (currentFragment == null) {
             val fragment = BBGameListFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
@@ -117,10 +119,13 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
     override fun onGameSelected(bbgameID: UUID) {
         Log.d(TAG, "MainActivity.onGameSelected: $bbgameID")
         val fragment = main_fragment.newInstance(bbgameID)
+        this.supportActionBar?.hide()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 
     override fun onDisplay(teamAWin: Boolean) {
+        this.supportActionBar?.show()
+        this.supportActionBar?.setDisplayShowTitleEnabled(false)
         val fragment = BBGameListFragment.newInstance(teamAWin)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
