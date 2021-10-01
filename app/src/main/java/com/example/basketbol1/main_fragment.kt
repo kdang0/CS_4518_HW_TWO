@@ -10,10 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
@@ -29,6 +26,10 @@ private const val KEY_BName = "TeamB"
 private const val REQUEST_CODE_CLICKED = 0
 
 class main_fragment : Fragment() {
+    private lateinit var photoAButton : ImageButton
+    private lateinit var photoAView : ImageView
+    private lateinit var photoBButton : ImageButton
+    private lateinit var photoBView : ImageView
     private lateinit var bbGame: BBGame
     private lateinit var textA: EditText
     private lateinit var textAPTS: TextView
@@ -133,6 +134,11 @@ class main_fragment : Fragment() {
         textB = view.findViewById(R.id.textB) as EditText
         textBPTS = view.findViewById(R.id.textBPTS) as TextView
         basketbolIcon = view.findViewById(R.id.bbIcon) as ImageView
+        photoAButton = view.findViewById(R.id.teamAUPButton) as ImageButton
+        photoBButton = view.findViewById(R.id.teamBUPButton) as ImageButton
+        photoAView = view.findViewById(R.id.teamAPhoto) as ImageView
+        photoBView = view.findViewById(R.id.teamBPhoto) as ImageView
+
         val aScore = 0
         basketbolViewModel.teams[0].score = aScore
         textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -186,7 +192,9 @@ class main_fragment : Fragment() {
 
         saveButton.setOnClickListener {
             basketbolViewModel.saveBBGame(bbGame)
+            !saveButton.isEnabled
         }
+
 
 
         return view

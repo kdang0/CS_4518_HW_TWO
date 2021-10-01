@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import java.io.File
 import java.util.*
 
 private const val TAG = "BasketbolViewModel"
@@ -58,5 +59,9 @@ class BasketbolViewModel : ViewModel() {
 
     fun saveBBGame(bbGame: BBGame) {
         BBGameRepository.updateBBGame(bbGame)
+    }
+
+    fun getPhotoFile(game : BBGame) : File {
+        return BBGameRepository.getPhotoFile(game)
     }
 }

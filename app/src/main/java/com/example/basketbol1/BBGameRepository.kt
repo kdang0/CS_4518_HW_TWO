@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.basketbol1.localdatabase.BBGameDatabase
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -17,7 +18,7 @@ class BBGameRepository private constructor(context : Context) {
     ).build()
 
     private val executor = Executors.newSingleThreadExecutor()
-    
+    private val filesDir = context.applicationContext.filesDir
     fun getBBGames() : LiveData<List<BBGame>> = database.BBGameDao().getBBGames()
     fun getBBGame(id : UUID) : LiveData<BBGame?> = database.BBGameDao().getBBGame(id)
     fun getBBGameAWin() : LiveData<List<BBGame>> = database.BBGameDao().getBBGameAWin()
@@ -34,6 +35,8 @@ class BBGameRepository private constructor(context : Context) {
             database.BBGameDao().addGame(bbGame)
         }
     }
+
+    fun getPhotoFile(game:BBGame) : File = File(filesDir, game.photoFileName)
     
     companion object{
         private var INSTANCE: BBGameRepository? = null

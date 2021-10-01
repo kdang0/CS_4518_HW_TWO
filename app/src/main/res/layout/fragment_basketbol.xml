@@ -9,24 +9,49 @@
 
     <ImageView
         android:id="@+id/teamBPhoto"
-        android:layout_width="75dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="52dp"
+        android:layout_width="105dp"
+        android:layout_height="99dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <ImageView
         android:id="@+id/teamAPhoto"
-        android:layout_width="75dp"
-        android:layout_height="79dp"
-        android:layout_marginStart="68dp"
+        android:layout_width="105dp"
+        android:layout_height="99dp"
+        android:layout_marginStart="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055"
+        app:layout_constraintVertical_bias="0.025"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <ImageButton
+        android:id="@+id/teamBUPButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.853"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teamBPhoto"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <ImageButton
+        android:id="@+id/teamAUPButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teamAPhoto"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <ImageView
         android:id="@+id/bbIcon"
@@ -60,16 +85,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/team_a"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:text="@string/team_a" />
 
             <TextView
                 android:id="@+id/textAPTS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:text="@string/point_one"
-                android:textSize="87dp" />
+                android:textSize="87dp"
+                tools:text="@string/point_one" />
 
             <Button
                 android:id="@+id/buttonAPT3"
@@ -80,8 +105,8 @@
                 android:text="@string/three_pointer" />
 
             <Button
-                style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
                 android:id="@+id/buttonAPT2"
+                style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -113,17 +138,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/team_b"
                 android:inputType="text"
-                />
+                android:text="@string/team_b" />
 
             <TextView
                 android:id="@+id/textBPTS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:text="@string/point_two"
-                android:textSize="87dp" />
+                android:textSize="87dp"
+                tools:text="@string/point_two" />
 
             <Button
                 android:id="@+id/buttonBPT3"
