@@ -3,7 +3,11 @@ package com.example.basketbol1
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -16,6 +20,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
 import java.util.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import java.io.File
 
 private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
@@ -24,12 +30,15 @@ private const val ARG_BBGAME_ID = "bbgame_id"
 private const val KEY_AName = "TeamA"
 private const val KEY_BName = "TeamB"
 private const val REQUEST_CODE_CLICKED = 0
-
+private const val REQUEST_PHOTOA = 2
+private const val REQUEST_PHOTOB = 3
 class main_fragment : Fragment() {
     private lateinit var photoAButton : ImageButton
     private lateinit var photoAView : ImageView
     private lateinit var photoBButton : ImageButton
     private lateinit var photoBView : ImageView
+    private lateinit var photoFile : File
+    private lateinit var photoUri : Uri
     private lateinit var bbGame: BBGame
     private lateinit var textA: EditText
     private lateinit var textAPTS: TextView
@@ -208,6 +217,9 @@ class main_fragment : Fragment() {
                 this.bbGame = bbGame
                 basketbolViewModel.teamAPoints = bbGame.teamAScore
                 basketbolViewModel.teamBPoints = bbGame.teamBScore
+                photoFile = basketbolViewModel.getPhotoFile(bbGame)
+                photoUri = FileProvider.getUriForFile(requireActivity(),
+                "com.example.basketbol1.fileprovider",photoFile)
                 updateUI()
             }
         })
@@ -215,7 +227,7 @@ class main_fragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mainCallbacks = null
+        requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,6 +245,15 @@ class main_fragment : Fragment() {
             Log.d(TAG, "updated button on homepage")
 
         }
+        if(requestCode == REQUEST_PHOTOA){
+            requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            updateAPhotoView()
+        }
+        if(requestCode == REQUEST_PHOTOB){
+            requireActivity().revokeUriPermission(photoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            updateBPhotoView()
+        }
+
     }
 
     private fun updateUI() {
@@ -240,6 +261,26 @@ class main_fragment : Fragment() {
         textB.setText(bbGame.teamBName)
         textAPTS.setText(bbGame.teamAScore.toString())
         textBPTS.setText(bbGame.teamBScore.toString())
+        updateAPhotoView()
+        updateBPhotoView()
+    }
+
+    private fun updateAPhotoView() {
+        if(photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoAView.setImageBitmap(bitmap)
+        } else {
+            photoAView.setImageDrawable(null)
+        }
+    }
+
+    private fun updateBPhotoView() {
+        if(photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoBView.setImageBitmap(bitmap)
+        } else {
+            photoBView.setImageDrawable(null)
+        }
     }
 
     override fun onStart() {
@@ -250,7 +291,12 @@ class main_fragment : Fragment() {
                 //space left blank
             }
 
-            override fun onTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun onTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 bbGame.teamAName = sequence.toString()
             }
 
@@ -264,7 +310,12 @@ class main_fragment : Fragment() {
                 //space left blank
             }
 
-            override fun onTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun onTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 bbGame.teamBName = sequence.toString()
             }
 
@@ -273,7 +324,70 @@ class main_fragment : Fragment() {
             }
         }
         textB.addTextChangedListener(textBWatcher)
+
+        photoAButton.apply {
+            val packageManager: PackageManager =
+                requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(
+                    captureImage,
+                    PackageManager.MATCH_DEFAULT_ONLY
+                )
+            if (resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                val cameraActivities: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(
+                        captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY
+                    )
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                }
+
+                startActivityForResult(captureImage, REQUEST_PHOTOA)
+            }
+        }
+
+        photoBButton.apply {
+            val packageManager: PackageManager =
+                requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(
+                    captureImage,
+                    PackageManager.MATCH_DEFAULT_ONLY
+                )
+            if (resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                val cameraActivities: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(
+                        captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY
+                    )
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                }
+
+                startActivityForResult(captureImage, REQUEST_PHOTOB)
+            }
+        }
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -295,6 +409,8 @@ class main_fragment : Fragment() {
         Log.d(TAG, "onStop() called")
         basketbolViewModel.saveBBGame(bbGame)
     }
+
+
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
