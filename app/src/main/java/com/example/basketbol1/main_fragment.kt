@@ -24,6 +24,12 @@ import androidx.lifecycle.Observer
 import java.util.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LiveData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 
 private const val TAG = "Main_Fragment"
@@ -78,6 +84,8 @@ class main_fragment : Fragment() {
         val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
+        val openWeatherMapLiveData: LiveData<List<WeatherItem>> = OpenWeatherMapFetchr().fetchWeather()
+        openWeatherMapLiveData.observe(this, Observer { weatherItems -> Log.d(TAG, "Response Received: $weatherItems") })
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
 //        textAPTS.text = basketbolViewModel.teamAPoints.toString()
