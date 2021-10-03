@@ -15,7 +15,9 @@ data class BBGame(
     var teamBScore: Int = 0,
     @ColumnInfo(name= "date") var date: Date = Date()
 ) {
-    val photoFileName get() = "IMG_$id.jpg"
+    val photoAFileName get() = "IMG_$id.jpg"
+    val photoBFileName get() = "IMG_$id.jpg"
+
 }
 
 

@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -37,8 +40,10 @@ class main_fragment : Fragment() {
     private lateinit var photoAView : ImageView
     private lateinit var photoBButton : ImageButton
     private lateinit var photoBView : ImageView
-    private lateinit var photoFile : File
-    private lateinit var photoUri : Uri
+    private lateinit var photoAFile : File
+    private lateinit var photoBFile : File
+    private lateinit var photoAUri : Uri
+    private lateinit var photoBUri : Uri
     private lateinit var bbGame: BBGame
     private lateinit var textA: EditText
     private lateinit var textAPTS: TextView
@@ -55,6 +60,8 @@ class main_fragment : Fragment() {
     private lateinit var saveButton: Button
     private lateinit var mContext: Context
     private lateinit var basketbolIcon : ImageView
+
+
     private val basketbolViewModel: BasketbolViewModel by lazy {
         ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
     }
@@ -217,17 +224,21 @@ class main_fragment : Fragment() {
                 this.bbGame = bbGame
                 basketbolViewModel.teamAPoints = bbGame.teamAScore
                 basketbolViewModel.teamBPoints = bbGame.teamBScore
-                photoFile = basketbolViewModel.getPhotoFile(bbGame)
-                photoUri = FileProvider.getUriForFile(requireActivity(),
-                "com.example.basketbol1.fileprovider",photoFile)
+                photoAFile = basketbolViewModel.getPhotoAFile(bbGame)
+                photoAUri = FileProvider.getUriForFile(requireActivity(),
+                "com.example.basketbol1.fileprovider",photoAFile)
+                photoBFile = basketbolViewModel.getPhotoBFile(bbGame)
+                photoBUri = FileProvider.getUriForFile(requireActivity(),
+                    "com.example.basketbol1.fileprovider", photoBFile)
                 updateUI()
+
             }
         })
     }
 
     override fun onDetach() {
         super.onDetach()
-        requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        requireActivity().revokeUriPermission(photoAUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -245,14 +256,20 @@ class main_fragment : Fragment() {
             Log.d(TAG, "updated button on homepage")
 
         }
-        if(requestCode == REQUEST_PHOTOA){
-            requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            updateAPhotoView()
-        }
-        if(requestCode == REQUEST_PHOTOB){
-            requireActivity().revokeUriPermission(photoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            updateBPhotoView()
-        }
+            if(requestCode == REQUEST_PHOTOA) {
+                requireActivity().revokeUriPermission(
+                    photoAUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+                updateAPhotoView()
+            }
+
+            else if(requestCode == REQUEST_PHOTOB){
+                requireActivity().revokeUriPermission(photoBUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                updateBPhotoView()
+            }
+
+
 
     }
 
@@ -261,23 +278,27 @@ class main_fragment : Fragment() {
         textB.setText(bbGame.teamBName)
         textAPTS.setText(bbGame.teamAScore.toString())
         textBPTS.setText(bbGame.teamBScore.toString())
-        updateAPhotoView()
-        updateBPhotoView()
+        //updateAPhotoView()
+        //updateBPhotoView()
     }
 
     private fun updateAPhotoView() {
-        if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            photoAView.setImageBitmap(bitmap)
+        if(photoAFile.exists()) {
+            val bitmap = getScaledBitmap(photoAFile.path, requireActivity())
+            val rotbitmap = orientBitmap(photoAFile.path, bitmap)
+            photoAView.setImageBitmap(rotbitmap)
+
         } else {
             photoAView.setImageDrawable(null)
         }
     }
 
     private fun updateBPhotoView() {
-        if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            photoBView.setImageBitmap(bitmap)
+        if(photoBFile.exists()) {
+            val bitmap = getScaledBitmap(photoBFile.path, requireActivity())
+            val rotbitmap = orientBitmap(photoBFile.path,bitmap)
+            photoBView.setImageBitmap(rotbitmap)
+
         } else {
             photoBView.setImageDrawable(null)
         }
@@ -338,7 +359,7 @@ class main_fragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoAUri)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(
                         captureImage,
@@ -347,7 +368,7 @@ class main_fragment : Fragment() {
                 for (cameraActivity in cameraActivities) {
                     requireActivity().grantUriPermission(
                         cameraActivity.activityInfo.packageName,
-                        photoUri,
+                        photoAUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
@@ -369,7 +390,7 @@ class main_fragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoBUri)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(
                         captureImage,
@@ -378,7 +399,7 @@ class main_fragment : Fragment() {
                 for (cameraActivity in cameraActivities) {
                     requireActivity().grantUriPermission(
                         cameraActivity.activityInfo.packageName,
-                        photoUri,
+                        photoBUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }

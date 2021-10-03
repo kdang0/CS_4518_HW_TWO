@@ -36,7 +36,10 @@ class BBGameRepository private constructor(context : Context) {
         }
     }
 
-    fun getPhotoFile(game:BBGame) : File = File(filesDir, game.photoFileName)
+    fun getPhotoAFile(game:BBGame) : File = File(filesDir, game.photoAFileName)
+
+    fun getPhotoBFile(game:BBGame) : File = File(filesDir, game.photoBFileName)
+
     
     companion object{
         private var INSTANCE: BBGameRepository? = null

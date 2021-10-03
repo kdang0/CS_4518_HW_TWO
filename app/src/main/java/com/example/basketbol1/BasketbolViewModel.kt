@@ -61,7 +61,11 @@ class BasketbolViewModel : ViewModel() {
         BBGameRepository.updateBBGame(bbGame)
     }
 
-    fun getPhotoFile(game : BBGame) : File {
-        return BBGameRepository.getPhotoFile(game)
+    fun getPhotoAFile(game : BBGame) : File {
+        return BBGameRepository.getPhotoAFile(game)
+    }
+
+    fun getPhotoBFile(game : BBGame) : File {
+        return BBGameRepository.getPhotoBFile(game)
     }
 }
