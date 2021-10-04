@@ -10,5 +10,12 @@ interface OpenWeatherMapApi {
             "&nojsoncallback=1" +
             "&extras=url_s"
     )
-    fun fetchWeather(): Call<OpenWeatherMapResponse>
+    fun fetchWeatherName(): Call<WeatherNameItem>
+    @GET("data/2.5/weather?id=4956184" +
+            "&appID=475f6e184f638ba53d8ef78248c620e1" +
+            "&format=json" +
+            "&nojsoncallback=1" +
+            "&extras=url_s"
+    )
+    fun fetchWeatherTemp(): Call<OpenWeatherMapResponse>
 }

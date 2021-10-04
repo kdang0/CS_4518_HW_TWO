@@ -84,8 +84,10 @@ class main_fragment : Fragment() {
         val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
-        val openWeatherMapLiveData: LiveData<List<WeatherItem>> = OpenWeatherMapFetchr().fetchWeather()
-        openWeatherMapLiveData.observe(this, Observer { weatherItems -> Log.d(TAG, "Response Received: $weatherItems") })
+        val openWeatherMapLiveData: LiveData<WeatherTempItem> = OpenWeatherMapFetchr().fetchWeatherTemp()
+        openWeatherMapLiveData.observe(this, Observer { weatherNameItems -> Log.d(TAG, "Response Received: $weatherNameItems") })
+        val openWeatherMapNameLiveData : LiveData<WeatherNameItem> = OpenWeatherMapFetchr().fetchWeatherLocal()
+        openWeatherMapNameLiveData.observe(this, Observer { weatherTempItems -> Log.d(TAG, "Response Received: $weatherTempItems") })
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
 //        textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -438,6 +440,7 @@ class main_fragment : Fragment() {
         Log.d(TAG, "onStop() called")
         basketbolViewModel.saveBBGame(bbGame)
     }
+
 
 
 

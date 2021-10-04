@@ -20,9 +20,10 @@ class OpenWeatherMapFetchr {
         openWeatherMapApi = retrofit.create(OpenWeatherMapApi::class.java)
     }
 
-    fun fetchWeather(): LiveData<List<WeatherItem>> {
-        val responseLiveData: MutableLiveData<List<WeatherItem>> = MutableLiveData()
-        val openWeatherMapRequest: Call<OpenWeatherMapResponse> = openWeatherMapApi.fetchWeather()
+    fun fetchWeatherTemp(): LiveData<WeatherTempItem> {
+//        val responseLiveData: MutableLiveData<String> = MutableLiveData()
+        val responseLiveData : MutableLiveData<WeatherTempItem> = MutableLiveData()
+        val openWeatherMapRequest: Call<OpenWeatherMapResponse> = openWeatherMapApi.fetchWeatherTemp()
         openWeatherMapRequest.enqueue(object : Callback<OpenWeatherMapResponse> {
             override fun onFailure(call: Call<OpenWeatherMapResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch weather", t)
@@ -30,10 +31,32 @@ class OpenWeatherMapFetchr {
 
             override fun onResponse(call: Call<OpenWeatherMapResponse>, response: Response<OpenWeatherMapResponse>) {
                 Log.d(TAG, "Response received")
-                val openWeatherMapResponse: OpenWeatherMapResponse? = response.body()
-                val weatherResponse: WeatherResponse? = openWeatherMapResponse?.weatherResponse
-                var weatherItems: List<WeatherItem>? = weatherResponse?.weatherItems
-                responseLiveData.value = weatherItems
+//                val weatherMapResponse: WeatherResponse? = response.body()
+//                responseLiveData.value = response.body()
+//                val //weatherResponse: WeatherResponse? = weatherResponse?.weatherItems
+                //var weatherItems: List<WeatherItem>? = weatherResponse?.weatherItems
+                //responseLiveData.value = weatherItems
+                val openWeatherResponse : OpenWeatherMapResponse? = response.body()
+                var weatherTempItem : WeatherTempItem ?= openWeatherResponse?.main
+
+                responseLiveData.value = weatherTempItem
+            }
+        })
+        return responseLiveData
+    }
+
+    fun fetchWeatherLocal(): LiveData<WeatherNameItem> {
+        val responseLiveData : MutableLiveData<WeatherNameItem> = MutableLiveData()
+        val openWeatheMapRequest : Call<WeatherNameItem> = openWeatherMapApi.fetchWeatherName()
+        openWeatheMapRequest.enqueue(object : Callback<WeatherNameItem> {
+            override fun onFailure(call: Call<WeatherNameItem>, t:Throwable){
+                Log.e(TAG, "Failed to fetch weather", t)
+            }
+
+            override fun onResponse(call : Call<WeatherNameItem>, response: Response<WeatherNameItem>){
+                Log.d(TAG, "Response received")
+                var weatherNameItem : WeatherNameItem ?= response.body()
+                responseLiveData.value = weatherNameItem
             }
         })
         return responseLiveData
