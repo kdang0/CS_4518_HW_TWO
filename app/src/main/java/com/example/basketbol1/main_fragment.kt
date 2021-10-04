@@ -66,6 +66,12 @@ class main_fragment : Fragment() {
     private lateinit var saveButton: Button
     private lateinit var mContext: Context
     private lateinit var basketbolIcon : ImageView
+    private lateinit var weatherText: TextView
+    private lateinit var weatherViewModel: WeatherViewModel
+    private lateinit var weatherName: String
+    private lateinit var weatherTemp: String
+    private var isTempGot: Boolean = false
+    private var isNameGot: Boolean = false
 
 
     private val basketbolViewModel: BasketbolViewModel by lazy {
@@ -84,10 +90,7 @@ class main_fragment : Fragment() {
         val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
-        val openWeatherMapLiveData: LiveData<WeatherTempItem> = OpenWeatherMapFetchr().fetchWeatherTemp()
-        openWeatherMapLiveData.observe(this, Observer { weatherNameItems -> Log.d(TAG, "Response Received: $weatherNameItems") })
-        val openWeatherMapNameLiveData : LiveData<WeatherNameItem> = OpenWeatherMapFetchr().fetchWeatherLocal()
-        openWeatherMapNameLiveData.observe(this, Observer { weatherTempItems -> Log.d(TAG, "Response Received: $weatherTempItems") })
+        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
 //        textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -164,6 +167,7 @@ class main_fragment : Fragment() {
         photoBButton = view.findViewById(R.id.teamBUPButton) as ImageButton
         photoAView = view.findViewById(R.id.teamAPhoto) as ImageView
         photoBView = view.findViewById(R.id.teamBPhoto) as ImageView
+        weatherText = view.findViewById(R.id.weatherText) as TextView
 
         val aScore = 0
         basketbolViewModel.teams[0].score = aScore
@@ -244,6 +248,20 @@ class main_fragment : Fragment() {
 
             }
         })
+        weatherViewModel.weatherNameItemLiveData.observe(
+            viewLifecycleOwner, Observer {
+                    weatherNameItem ->  weatherNameItem?.let {
+                        this.weatherName = weatherNameItem.name
+                        isNameGot = true
+                        updateUI()
+            }})
+        weatherViewModel.weatherTempItemLiveData.observe(
+            viewLifecycleOwner, Observer {
+                    weatherTempItems -> weatherTempItems?.let {
+                        this.weatherTemp = weatherTempItems.temp
+                        isTempGot = true
+                        updateUI()
+            }})
     }
 
     override fun onDetach() {
@@ -288,6 +306,11 @@ class main_fragment : Fragment() {
         textB.setText(bbGame.teamBName)
         textAPTS.setText(bbGame.teamAScore.toString())
         textBPTS.setText(bbGame.teamBScore.toString())
+        if(isNameGot && isTempGot) {
+            var weatherTempFarenheit = weatherTemp.toDouble()
+            weatherTempFarenheit = (weatherTempFarenheit - 273.15) * 9/5 + 32
+            weatherText.setText(weatherName + ": " + weatherTempFarenheit.toString())
+        }
         //updateAPhotoView()
         //updateBPhotoView()
     }
