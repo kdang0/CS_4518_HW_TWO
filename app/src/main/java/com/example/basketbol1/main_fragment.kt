@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.location.Location
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +31,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,10 +81,9 @@ class main_fragment : Fragment() {
     private lateinit var weatherTemp: String
     private lateinit var weatherButA : ImageButton
     private lateinit var weatherButB : ImageButton
-    private lateinit var fusedLocationClient : FusedLocationProviderClient
     private var isTempGot: Boolean = false
     private var isNameGot: Boolean = false
-    private var locationPermissionGranted = false
+
 
 
     private val basketbolViewModel: BasketbolViewModel by lazy {
@@ -101,7 +102,7 @@ class main_fragment : Fragment() {
         val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.activity)
+
 
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
@@ -457,6 +458,8 @@ class main_fragment : Fragment() {
                 startActivityForResult(captureImage, REQUEST_PHOTOB)
             }
         }
+
+
     }
 
 
@@ -494,25 +497,10 @@ class main_fragment : Fragment() {
 
     }
 
-    private fun getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(this.mContext,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true
-        } else {
-            ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
-        }
-    }
+
 
 
     companion object {
-        private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
         fun newInstance(bbgameID: UUID): main_fragment {
             val args = Bundle().apply {
                 putSerializable(ARG_BBGAME_ID, bbgameID)

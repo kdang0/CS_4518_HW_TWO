@@ -24,6 +24,7 @@ fun orientBitmap(path:String, bmp : Bitmap) : Bitmap{
     mat.postRotate(angle.toFloat())
     var newbmp = createBitmap(bmp,0,0, bmp.width, bmp.height, mat, true)
     return newbmp
+    //hello world s
 }
 
 fun getScaledBitmap(path:String, activity: Activity): Bitmap {

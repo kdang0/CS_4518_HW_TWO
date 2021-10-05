@@ -3,6 +3,8 @@ package com.example.basketbol1
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Layout
@@ -11,10 +13,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 //import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.basketbol1.R
 import com.example.basketbol1.Team
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 //import com.example.myapplication.R
@@ -39,6 +46,11 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 //    private lateinit var buttonBPT1: Button
 //    private lateinit var buttonReset: Button
 //    private lateinit var displayButton : Button
+    private lateinit var fusedLocationClient : FusedLocationProviderClient
+    private var locationPermissionGranted = false
+    private var lastKnownLocation : Location?= null
+    private var long : Double = -71.798889
+    private var lat : Double = 42.271389
 //    private val basketbolViewModel: BasketbolViewModel by lazy {
 //        ViewModelProviders.of(this).get(BasketbolViewModel::class.java)
 //   }
@@ -50,6 +62,7 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
         setContentView(R.layout.activity_main)
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         this.supportActionBar?.setDisplayShowTitleEnabled(false)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (currentFragment == null) {
             val fragment = BBGameListFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
@@ -112,8 +125,47 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 //            startActivityForResult(intent, REQUEST_CODE_CLICKED)
 //
 //        }
+        getLocationPermission()
+        getDeviceLocation()
 
 
+    }
+
+    private fun getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            )
+        }
+    }
+
+    private fun getDeviceLocation() {
+        try {
+            if (locationPermissionGranted) {
+                val locationResult = fusedLocationClient.lastLocation
+                locationResult.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        lastKnownLocation = task.result
+                        if (lastKnownLocation != null) {
+                            LatLng(lastKnownLocation!!.latitude,
+                                lastKnownLocation!!.longitude)
+                            lat = lastKnownLocation!!.latitude
+                            long = lastKnownLocation!!.longitude
+                            Log.d(TAG, "Current location " + lat + " " + long)
+                        }
+                    } else {
+                        Log.d(TAG, "Current location is null. Using defaults.")
+                        Log.e(TAG, "Exception: %s", task.exception)
+                    }
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e("Exception: %s", e.message, e)
+        }
     }
 
     override fun onGameSelected(bbgameID: UUID) {
@@ -178,6 +230,8 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 //            savedInstanceState.putInt(KEY_BScore, basketbolViewModel.teams[1].score)
 //
 //        }
-
+    companion object{
+    private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
+    }
 }
 
