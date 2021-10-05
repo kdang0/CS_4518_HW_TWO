@@ -1,5 +1,6 @@
 package com.example.basketbol1
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -23,14 +24,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
 import java.util.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
+import java.util.jar.Manifest
 
 private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
@@ -42,6 +48,7 @@ private const val REQUEST_CODE_CLICKED = 0
 private const val REQUEST_PHOTOA = 2
 private const val REQUEST_PHOTOB = 3
 class main_fragment : Fragment() {
+
     private lateinit var photoAButton : ImageButton
     private lateinit var photoAView : ImageView
     private lateinit var photoBButton : ImageButton
@@ -70,8 +77,12 @@ class main_fragment : Fragment() {
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var weatherName: String
     private lateinit var weatherTemp: String
+    private lateinit var weatherButA : ImageButton
+    private lateinit var weatherButB : ImageButton
+    private lateinit var fusedLocationClient : FusedLocationProviderClient
     private var isTempGot: Boolean = false
     private var isNameGot: Boolean = false
+    private var locationPermissionGranted = false
 
 
     private val basketbolViewModel: BasketbolViewModel by lazy {
@@ -90,6 +101,8 @@ class main_fragment : Fragment() {
         val bbgameID: UUID = arguments?.getSerializable(ARG_BBGAME_ID) as UUID
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.activity)
+
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
@@ -168,6 +181,9 @@ class main_fragment : Fragment() {
         photoAView = view.findViewById(R.id.teamAPhoto) as ImageView
         photoBView = view.findViewById(R.id.teamBPhoto) as ImageView
         weatherText = view.findViewById(R.id.weatherText) as TextView
+        weatherButA = view.findViewById(R.id.weatherA) as ImageButton
+        weatherButB = view.findViewById(R.id.weatherB) as ImageButton
+
 
         val aScore = 0
         basketbolViewModel.teams[0].score = aScore
@@ -224,6 +240,7 @@ class main_fragment : Fragment() {
             basketbolViewModel.saveBBGame(bbGame)
             !saveButton.isEnabled
         }
+
 
 
 
@@ -477,10 +494,25 @@ class main_fragment : Fragment() {
 
     }
 
-
+    private fun getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.mContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true
+        } else {
+            ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+        }
+    }
 
 
     companion object {
+        private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
         fun newInstance(bbgameID: UUID): main_fragment {
             val args = Bundle().apply {
                 putSerializable(ARG_BBGAME_ID, bbgameID)
