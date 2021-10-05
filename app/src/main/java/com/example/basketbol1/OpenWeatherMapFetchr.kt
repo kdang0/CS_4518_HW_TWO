@@ -20,10 +20,10 @@ class OpenWeatherMapFetchr {
         openWeatherMapApi = retrofit.create(OpenWeatherMapApi::class.java)
     }
 
-    fun fetchWeatherTemp(): LiveData<WeatherTempItem> {
+    fun fetchWeatherTemp(lat: Double, long: Double): LiveData<WeatherTempItem> {
 //        val responseLiveData: MutableLiveData<String> = MutableLiveData()
         val responseLiveData : MutableLiveData<WeatherTempItem> = MutableLiveData()
-        val openWeatherMapRequest: Call<OpenWeatherMapResponse> = openWeatherMapApi.fetchWeatherTemp()
+        val openWeatherMapRequest: Call<OpenWeatherMapResponse> = openWeatherMapApi.fetchWeatherTemp(lat.toString(), long.toString())
         openWeatherMapRequest.enqueue(object : Callback<OpenWeatherMapResponse> {
             override fun onFailure(call: Call<OpenWeatherMapResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch weather", t)
@@ -45,9 +45,9 @@ class OpenWeatherMapFetchr {
         return responseLiveData
     }
 
-    fun fetchWeatherLocal(): LiveData<WeatherNameItem> {
+    fun fetchWeatherLocal(lat: Double, long: Double): LiveData<WeatherNameItem> {
         val responseLiveData : MutableLiveData<WeatherNameItem> = MutableLiveData()
-        val openWeatheMapRequest : Call<WeatherNameItem> = openWeatherMapApi.fetchWeatherName()
+        val openWeatheMapRequest : Call<WeatherNameItem> = openWeatherMapApi.fetchWeatherName(lat.toString(), long.toString())
         openWeatheMapRequest.enqueue(object : Callback<WeatherNameItem> {
             override fun onFailure(call: Call<WeatherNameItem>, t:Throwable){
                 Log.e(TAG, "Failed to fetch weather", t)

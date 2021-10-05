@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 
     override fun onGameSelected(bbgameID: UUID) {
         Log.d(TAG, "MainActivity.onGameSelected: $bbgameID")
-        val fragment = main_fragment.newInstance(bbgameID)
+        val fragment = main_fragment.newInstance(bbgameID, lat, long)
         this.supportActionBar?.hide()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }

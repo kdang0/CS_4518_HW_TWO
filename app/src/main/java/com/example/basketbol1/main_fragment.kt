@@ -44,6 +44,8 @@ private const val TAG = "Main_Fragment"
 private const val KEY_AScore = "AScore"
 private const val KEY_BScore = "BScore"
 private const val ARG_BBGAME_ID = "bbgame_id"
+private const val ARG_LATITUDE = "latitude"
+private const val ARG_LONGITUDE = "longitude"
 private const val KEY_AName = "TeamA"
 private const val KEY_BName = "TeamB"
 private const val REQUEST_CODE_CLICKED = 0
@@ -77,12 +79,14 @@ class main_fragment : Fragment() {
     private lateinit var basketbolIcon : ImageView
     private lateinit var weatherText: TextView
     private lateinit var weatherViewModel: WeatherViewModel
+    private lateinit var weatherViewModelFactory: WeatherViewModelFactory
     private lateinit var weatherName: String
     private lateinit var weatherTemp: String
     private lateinit var weatherButA : ImageButton
     private lateinit var weatherButB : ImageButton
     private var isTempGot: Boolean = false
     private var isNameGot: Boolean = false
+    private var isGameGot: Boolean = false
 
 
 
@@ -103,8 +107,10 @@ class main_fragment : Fragment() {
         Log.d(TAG, "args bundle bbgame ID: $bbgameID")
         basketbolViewModel.loadBBGame(bbgameID)
 
-
-        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+        val latitude: Double = arguments?.getSerializable(ARG_LATITUDE) as Double
+        val longitude: Double = arguments?.getSerializable(ARG_LONGITUDE) as Double
+        weatherViewModelFactory = WeatherViewModelFactory(latitude, longitude)
+        weatherViewModel = ViewModelProviders.of(this, weatherViewModelFactory).get(WeatherViewModel::class.java)
 //        val aScore = savedInstanceState?.getInt(KEY_AScore, 0) ?: 0
 //        basketbolViewModel.teams[0].score = aScore
 //        textAPTS.text = basketbolViewModel.teamAPoints.toString()
@@ -262,6 +268,7 @@ class main_fragment : Fragment() {
                 photoBFile = basketbolViewModel.getPhotoBFile(bbGame)
                 photoBUri = FileProvider.getUriForFile(requireActivity(),
                     "com.example.basketbol1.fileprovider", photoBFile)
+                isGameGot = true
                 updateUI()
 
             }
@@ -320,10 +327,12 @@ class main_fragment : Fragment() {
     }
 
     private fun updateUI() {
-        textA.setText(bbGame.teamAName)
-        textB.setText(bbGame.teamBName)
-        textAPTS.setText(bbGame.teamAScore.toString())
-        textBPTS.setText(bbGame.teamBScore.toString())
+        if(isGameGot) {
+            textA.setText(bbGame.teamAName)
+            textB.setText(bbGame.teamBName)
+            textAPTS.setText(bbGame.teamAScore.toString())
+            textBPTS.setText(bbGame.teamBScore.toString())
+        }
         if(isNameGot && isTempGot) {
             var weatherTempFarenheit = weatherTemp.toDouble()
             weatherTempFarenheit = (weatherTempFarenheit - 273.15) * 9/5 + 32
@@ -501,9 +510,11 @@ class main_fragment : Fragment() {
 
 
     companion object {
-        fun newInstance(bbgameID: UUID): main_fragment {
+        fun newInstance(bbgameID: UUID, lat: Double, long: Double): main_fragment {
             val args = Bundle().apply {
                 putSerializable(ARG_BBGAME_ID, bbgameID)
+                putSerializable(ARG_LATITUDE, lat)
+                putSerializable(ARG_LONGITUDE, long)
             }
             return main_fragment().apply {
                 arguments = args
