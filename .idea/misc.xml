@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/A22/CS4518_HW_THREE/app/src/main/res/layout/fragment_basketbol.xml" value="0.27445652173913043" />
+        <entry key="..\:/A22/CS4518_HW_THREE/app/src/main/res/layout/fragment_basketbol.xml" value="0.29108635097493035" />
+        <entry key="..\:/A22/CS4518_HW_THREE/app/src/main/res/layout/fragment_game_list.xml" value="0.13703703703703704" />
         <entry key="..\:/A22/CS_4518_HW_ONE-master/app/src/main/res/drawable-anydpi/bb.xml" value="0.23541666666666666" />
         <entry key="..\:/A22/CS_4518_HW_ONE-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.23541666666666666" />
         <entry key="..\:/A22/CS_4518_HW_ONE-master/app/src/main/res/drawable/ic_launcher_background.xml" value="0.23541666666666666" />
@@ -29,7 +30,6 @@
         <entry key="..\:/Users/final/OneDrive/Documents/A22/HW2_CS4518_T/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/final/OneDrive/Documents/A22/HW2_CS4518_T/app/src/main/res/layout/fragment_basketbol.xml" value="0.25" />
         <entry key="..\:/Users/soren/OneDrive/Documents/CS_4518_HW_TWO/app/src/main/res/layout/activity_basketbol2.xml" value="0.21965579710144928" />
-        <entry key="..\:/Users/soren/OneDrive/Documents/CS_4518_HW_TWO/app/src/main/res/layout/activity_main.xml" value="0.18568840579710144" />
         <entry key="..\:/Users/soren/OneDrive/Documents/CS_4518_HW_TWO/app/src/main/res/layout/fragment_basketbol.xml" value="0.20104166666666667" />
         <entry key="..\:/Users/soren/OneDrive/Documents/CS_4518_HW_TWO/app/src/main/res/layout/fragment_game_list.xml" value="0.18697916666666667" />
         <entry key="..\:/Users/soren/OneDrive/Documents/CS_4518_HW_TWO/app/src/main/res/layout/list_item_bbgame.xml" value="0.4466666666666667" />

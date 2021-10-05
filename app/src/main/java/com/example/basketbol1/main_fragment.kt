@@ -182,8 +182,7 @@ class main_fragment : Fragment() {
         photoAView = view.findViewById(R.id.teamAPhoto) as ImageView
         photoBView = view.findViewById(R.id.teamBPhoto) as ImageView
         weatherText = view.findViewById(R.id.weatherText) as TextView
-        weatherButA = view.findViewById(R.id.weatherA) as ImageButton
-        weatherButB = view.findViewById(R.id.weatherB) as ImageButton
+
 
 
         val aScore = 0
