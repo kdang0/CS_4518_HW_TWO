@@ -1,8 +1,11 @@
 package com.example.basketbol1
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Layout
@@ -11,11 +14,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 //import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.basketbol1.R
 import com.example.basketbol1.Team
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import java.util.*
+import android.location.LocationManager
+import androidx.annotation.NonNull
+
+import com.google.android.gms.tasks.OnCompleteListener
+import android.os.Looper
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+
+import com.google.android.gms.location.LocationCallback
+
+
+
+
 
 //import com.example.myapplication.R
 //import com.example.myapplication.Team
@@ -26,6 +45,8 @@ private const val TAG = "MainActivity"
 //private const val REQUEST_CODE_CLICKED = 0
 
 class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fragment.MainCallbacks {
+
+    private lateinit var flc: FusedLocationProviderClient
 
 //    private lateinit var textA: TextView
 //    private lateinit var textAPTS: TextView
@@ -48,6 +69,15 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
+        flc = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            {
+            //
+        }
+        else {
+            Log.d(TAG, "Permissions Not Granted.")
+        }
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         this.supportActionBar?.setDisplayShowTitleEnabled(false)
         if (currentFragment == null) {
@@ -178,6 +208,8 @@ class MainActivity : AppCompatActivity(), BBGameListFragment.Callbacks, main_fra
 //            savedInstanceState.putInt(KEY_BScore, basketbolViewModel.teams[1].score)
 //
 //        }
+
+
 
 }
 
